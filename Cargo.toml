@@ -1,0 +1,10 @@
+[package]
+name = "e_shop_project"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+serde = {version = "1.0.215", features = ["derive"] }
+diesel = { version = "2.2.0", features = ["postgres"] }
+dotenvy = "0.15"
+log = "0.4"

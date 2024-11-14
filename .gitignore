@@ -1,0 +1,6 @@
+/target
+.idea
+Cargo.lock
+!diesel_cli/Cargo.lock
+.env
+*.snap.new
