@@ -3,11 +3,22 @@ name = "e_shop_project"
 version = "0.1.0"
 edition = "2021"
 
+
 [dependencies]
-anymap.version = "1.0.0-beta.2"
-serde = {version = "1.0.215", features = ["derive"] }
-diesel = { version = "2.2.0", features = ["postgres"] }
+# database
+diesel = { version = "2.2.0", features = ["postgres", "numeric", "returning_clauses_for_sqlite_3_35"] }
+serde = { version = "1.0.215", features = ["derive"] }
 dotenvy = "0.15"
-# logging
+# custom type for handling balance
+bigdecimal = "0.4"
+
+
+# presentation
+egui = "0.29.1"
+eframe = "0.29.1"
+
+# utils
+anymap.version = "1.0.0-beta.2"
+debug-ignore = "1.0.5"
 simple_logger = "5.0.0"
 log = "0.4"
