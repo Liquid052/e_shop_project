@@ -10,7 +10,6 @@ diesel = { version = "2.2.0", features = ["sqlite", "numeric", "returning_clause
 diesel_migrations = "2.2.0"
 serde = { version = "1.0.215", features = ["derive"] }
 dotenvy = "0.15"
-# in order to have embedded db to test it inside docker
 libsqlite3-sys = { version = "0.30", features = ["bundled"] }
 # custom type for handling balance
 bigdecimal = "0.4"

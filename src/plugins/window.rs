@@ -1,21 +1,17 @@
+use crate::prelude::*;
 use std::default::Default;
 use std::error::Error;
-use egui::Context;
-use crate::prelude::*;
 
-mod states;
 mod eframe_impl;
 mod plugin_impl;
 mod run_impl;
-
-// export of impls and others
-pub use run_impl::*;
+mod states;
 
 #[derive(Debug)]
 pub struct WindowPlugin {
     pub(crate) app: Option<App>,
     app_exit: AppExit,
-    update:   UpdateGui,
+    update: UpdateGui,
 }
 
 impl WindowPlugin {
