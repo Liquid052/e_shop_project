@@ -1,4 +1,5 @@
 use crate::prelude::*;
+use crate::resources::build::Build;
 use anymap::AnyMap;
 use std::any::TypeId;
 
@@ -30,12 +31,12 @@ impl AppBuilder {
         self
     }
 
-    pub fn build(mut self) -> impl Run {
+    pub fn build(mut self) -> Build {
         let Some(mut window_plugin) = self.any_map.remove::<WindowPlugin>() else {
-            return self.app;
+            return Build::App(self.app);
         };
 
         window_plugin.app = Some(self.app);
-        window_plugin.run();
+        Build::Window(window_plugin)
     }
 }

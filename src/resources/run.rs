@@ -1,3 +1,3 @@
 pub trait Run: Sized {
-    fn run(mut self);
+    fn run(self);
 }

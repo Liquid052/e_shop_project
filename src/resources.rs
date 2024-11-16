@@ -1,5 +1,6 @@
 mod app;
 mod app_builder;
+mod build;
 mod plugin;
 mod run;
 mod singleton_map;
