@@ -1,11 +1,11 @@
 #![ allow(unused)]
-use std::any::type_name;
+use std::any::{type_name, Any, TypeId};
 use std::collections::HashMap;
 use std::fmt::Debug;
 use std::sync::{Arc, RwLock};
 use anymap::AnyMap;
 use dotenvy::dotenv;
-use log::error;
+use log::{error, LevelFilter};
 use simple_logger::SimpleLogger;
 use crate::prelude::*;
 
@@ -24,13 +24,14 @@ pub struct App {
 
     any_map: AnyMap,
     res_map: SingletonMap,
-
+    first_update: bool,
 }
 
 impl App {
+    // build parameters
     pub fn new() -> Self {
         // init utils
-        SimpleLogger::new().init().unwrap();
+        SimpleLogger::new().with_level(LevelFilter::Info).init().unwrap();
         dotenv().ok();
 
         let mut res_map: SingletonMap = Default::default();
@@ -42,10 +43,14 @@ impl App {
             any_map: Default::default(),
             res_map,
             update_vec: vec![],
+            first_update: false,
         }
     }
+    pub fn name(mut self, name: impl Into<String>) -> Self {
+        self.app_name = name.into();
 
-    // plugin management
+        self
+    }
     pub fn add<T: Plugin>(mut self, mut plugin: T) -> Self {
         let plugin_type = plugin.plugin_name().into();
 
@@ -59,6 +64,8 @@ impl App {
 
         self
     }
+
+    // plugin management
     pub fn get<T: Plugin>(&self) -> Option<Arc<RwLock<T>>> {
         self.any_map.get::<Arc<RwLock<T>>>().cloned()
     }
@@ -85,12 +92,38 @@ impl App {
         self.res_map.remove()
     }
 
-    pub fn run(&mut self) {
+    pub fn get_name(&self) -> &str {
+        &self.app_name
+    }
+
+    pub fn update(&mut self) {
+        if !self.first_update {
+            self.update_vec.iter()
+                .for_each(|plugin| plugin.write().unwrap().on_build(self));
+
+            self.update_vec.iter()
+                .for_each(|plugin| plugin.write().unwrap().on_startup());
+
+            self.first_update = true;
+        }
+
         self.update_vec.iter()
-            .for_each(|plugin| plugin.write().unwrap().on_build(self));
+            .for_each(|plugin| plugin.write().unwrap().on_update());
+
+        self.update_vec.iter()
+            .for_each(|plugin| plugin.write().unwrap().on_post_update());
+    }
+}
+
+impl Run for App {
+    fn run(mut self) {
+        self.update_vec.iter()
+            .for_each(|plugin| plugin.write().unwrap().on_build(&self));
 
         self.update_vec.iter()
             .for_each(|plugin| plugin.write().unwrap().on_startup());
+
+        self.first_update = true;
 
         // update loop
         while !self.get_resource::<AppExit>()

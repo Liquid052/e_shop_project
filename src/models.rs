@@ -15,7 +15,7 @@ pub struct Address {
 
 #[derive(Queryable, Selectable, Insertable, Default, Debug)]
 #[diesel(table_name = crate::schema::accounts)]
-#[diesel(check_for_backend(diesel::pg::Pg))]
+#[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Account {
     pub account_id: i32,
     pub username: String,

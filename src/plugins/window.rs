@@ -1,43 +1,26 @@
+use std::default::Default;
+use std::error::Error;
+use egui::Context;
 use crate::prelude::*;
+
+mod states;
+mod eframe_impl;
+mod plugin_impl;
+mod run_impl;
 
 #[derive(Debug)]
 pub struct WindowPlugin {
-    pub db: Option<PluginContainer<DatabasePlugin>>,
-    pub update: UpdateGui,
+    pub(crate) app: Option<App>,
+    app_exit: AppExit,
+    update:   UpdateGui,
 }
 
 impl WindowPlugin {
     pub fn new() -> Self {
         Self {
-            db:             None,
+            app: None,
+            app_exit: Default::default(),
             update: Default::default(),
         }
     }
 }
-
-impl Plugin for WindowPlugin {
-    fn plugin_name(&self) -> &'static str {
-        "window"
-    }
-
-    fn insert_resources(&mut self, app: &mut App) {
-        let update_gui = UpdateGui::default();
-
-        self.update = update_gui.clone();
-        app.insert_resource(update_gui);
-    }
-
-    fn on_build(&mut self, app: &App) {
-        let db = app.get_expected::<DatabasePlugin>();
-        self.db = Some(db);
-
-        info!("window initialized");
-    }
-    fn on_update(&mut self) {
-        if self.update.should_update() {
-
-        }
-    }
-}
-
-

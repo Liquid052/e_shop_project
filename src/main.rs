@@ -9,8 +9,11 @@ mod schema;
 mod models;
 
 fn main() {
-    App::new()
+    AppBuilder::new()
+        .name("Eshop project")
         .add(DatabasePlugin::new())
+        .add(DomainPlugin::new())
         .add(WindowPlugin::new())
+        .build()
         .run();
 }

@@ -6,9 +6,11 @@ edition = "2021"
 
 [dependencies]
 # database
-diesel = { version = "2.2.0", features = ["postgres", "numeric", "returning_clauses_for_sqlite_3_35"] }
+diesel = { version = "2.2.0", features = ["sqlite", "numeric", "returning_clauses_for_sqlite_3_35"] }
+diesel_migrations = "2.2.0"
 serde = { version = "1.0.215", features = ["derive"] }
 dotenvy = "0.15"
+libsqlite3-sys = { version = "0.30", features = ["bundled"] }
 # custom type for handling balance
 bigdecimal = "0.4"
 
