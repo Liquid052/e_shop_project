@@ -1,6 +1,7 @@
 use std::any::TypeId;
 use anymap::AnyMap;
 use crate::prelude::*;
+use crate::resources::build::Build;
 
 pub struct AppBuilder {
     app: App,
@@ -30,13 +31,12 @@ impl AppBuilder {
 
         self
     }
+    pub fn build(mut self) -> Build {
+        if let Some(mut window_plugin) = self.any_map.remove::<WindowPlugin>() {
+            window_plugin.app = Some(self.app);
+            return Build::Window(window_plugin);
+        }
 
-    pub fn build(mut self) -> impl Run {
-        let Some(mut window_plugin) = self.any_map.remove::<WindowPlugin>() else {
-            return self.app;
-        };
-
-        window_plugin.app = Some(self.app);
-        window_plugin.run();
+        Build::App(self.app)
     }
 }

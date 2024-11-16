@@ -8,6 +8,9 @@ mod eframe_impl;
 mod plugin_impl;
 mod run_impl;
 
+// export of impls and others
+pub use run_impl::*;
+
 #[derive(Debug)]
 pub struct WindowPlugin {
     pub(crate) app: Option<App>,
