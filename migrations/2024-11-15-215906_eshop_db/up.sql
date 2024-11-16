@@ -89,51 +89,70 @@ INSERT INTO addresses (address_id, street, city, state, postal_code, country) VA
                                                                                   (4, '321 Maple Dr', 'Houston', 'TX', '77001', 'USA'),
                                                                                   (5, '654 Cedar Ln', 'Phoenix', 'AZ', '85001', 'USA');
 
-INSERT INTO categories (category_id, type_name) VALUES
-                                                    (1, 'Electronics'),
-                                                    (2, 'Clothing'),
-                                                    (3, 'Books'),
-                                                    (4, 'Home & Garden'),
-                                                    (5, 'Sports & Outdoors');
+INSERT INTO categories (category_id, type_name) VALUES (1, 'Womens Clothing'),
+                                                       (2, 'Mens Clothing'),
+                                                       (3, 'Accessories'),
+                                                       (4, 'Shoes'),
+                                                       (5, 'Bags');
 
 INSERT INTO accounts (account_id, username, role, first_name, last_name, phone_number, email, credit_card, address_id) VALUES
                                                                                                                            (1, 'john_doe', 'customer', 'John', 'Doe', '555-0123', 'john@example.com', '4532-xxxx-xxxx-1234', 1),
                                                                                                                            (2, 'jane_smith', 'customer', 'Jane', 'Smith', '555-0124', 'jane@example.com', '4532-xxxx-xxxx-5678', 2),
                                                                                                                            (3, 'bob_wilson', 'admin', 'Bob', 'Wilson', '555-0125', 'bob@example.com', '4532-xxxx-xxxx-9012', 3);
-
-INSERT INTO products (product_id, name, description, price, category_id) VALUES
-                                                                             (1, 'Laptop Pro', 'High-performance laptop with SSD', 1299.99, 1),
-                                                                             (2, 'Cotton T-Shirt', 'Comfortable casual wear', 19.99, 2),
-                                                                             (3, 'Programming Guide', 'Complete guide to coding', 49.99, 3),
-                                                                             (4, 'Garden Tools Set', 'Essential gardening tools', 89.99, 4),
-                                                                             (5, 'Tennis Racket', 'Professional grade racket', 159.99, 5);
+INSERT INTO products (product_id, name, description, price, category_id) VALUES (1, 'Designer Silk Dress',
+                                                                                 'Elegant silk evening dress with floral pattern',
+                                                                                 299.99, 1),
+                                                                                (2, 'Classic Mens Suit',
+                                                                                 'Two-piece wool blend suit in navy blue',
+                                                                                 599.99, 2),
+                                                                                (3, 'Leather Crossbody Bag',
+                                                                                 'Genuine leather bag with adjustable strap',
+                                                                                 149.99, 5),
+                                                                                (4, 'Designer Sneakers',
+                                                                                 'Limited edition designer sneakers',
+                                                                                 199.99, 4),
+                                                                                (5, 'Gold Plated Necklace',
+                                                                                 'Delicate chain with pendant', 79.99,
+                                                                                 3);
 
 INSERT INTO warehouses (warehouse_id, name, capacity, address_id) VALUES
                                                                       (1, 'East Coast Facility', 10000, 4),
                                                                       (2, 'West Coast Facility', 15000, 5);
 
-INSERT INTO orders (order_id, total_price, finished, account_id) VALUES
-                                                                     (1, 1349.98, 1, 1),
-                                                                     (2, 269.97, 0, 2),
-                                                                     (3, 89.99, 1, 3);
 
-INSERT INTO ordered_products (ordered_product_id, amount, order_id, product_id) VALUES
-                                                                                    (1, 1, 1, 1),
-                                                                                    (2, 2, 1, 2),
-                                                                                    (3, 1, 2, 3),
-                                                                                    (4, 1, 2, 4),
-                                                                                    (5, 1, 3, 4);
+INSERT INTO orders (order_id, total_price, finished, account_id) VALUES (1, 449.98, 1, 1), -- Dress + Necklace
+                                                                        (2, 749.98, 0, 2), -- Suit + Bag
+                                                                        (3, 199.99, 1, 3);
+-- Sneakers
 
-INSERT INTO product_comments (comment_id, content, account_id, product_id) VALUES
-                                                                               (1, 'Great laptop, very fast!', 1, 1),
-                                                                               (2, 'Comfortable fit, would buy again', 2, 2),
-                                                                               (3, 'Very informative book', 3, 3),
-                                                                               (4, 'Tools are durable and well-made', 1, 4),
-                                                                               (5, 'Perfect for my tennis games', 2, 5);
+-- Updated ordered products
+INSERT INTO ordered_products (ordered_product_id, amount, order_id, product_id) VALUES (1, 1, 1, 1), -- Dress
+                                                                                       (2, 1, 1, 5), -- Necklace
+                                                                                       (3, 1, 2, 2), -- Suit
+                                                                                       (4, 1, 2, 3), -- Bag
+                                                                                       (5, 1, 3, 4);
+-- Sneakers
 
-INSERT INTO stocks (stock_id, amount, warehouse_id, product_id) VALUES
-                                                                    (1, 50, 1, 1),
-                                                                    (2, 200, 1, 2),
-                                                                    (3, 100, 2, 3),
-                                                                    (4, 75, 2, 4),
-                                                                    (5, 25, 1, 5);
+-- Updated product comments
+INSERT INTO product_comments (comment_id, content, account_id, product_id) VALUES (1,
+                                                                                   'Perfect fit and beautiful fabric!',
+                                                                                   1, 1),
+                                                                                  (2,
+                                                                                   'Excellent quality suit, worth every penny',
+                                                                                   2, 2),
+                                                                                  (3,
+                                                                                   'The leather is so soft and the size is perfect',
+                                                                                   3, 3),
+                                                                                  (4,
+                                                                                   'These sneakers are amazing and so comfortable',
+                                                                                   1, 4),
+                                                                                  (5,
+                                                                                   'Beautiful necklace, looks even better in person',
+                                                                                   2, 5);
+
+-- Updated stock information
+INSERT INTO stocks (stock_id, amount, warehouse_id, product_id) VALUES (1, 25, 1, 1), -- Dresses in East Coast
+                                                                       (2, 30, 1, 2), -- Suits in East Coast
+                                                                       (3, 50, 2, 3), -- Bags in West Coast
+                                                                       (4, 45, 2, 4), -- Sneakers in West Coast
+                                                                       (5, 75, 1, 5); -- Necklaces in East Coast
