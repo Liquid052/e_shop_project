@@ -2,6 +2,7 @@
 PRAGMA foreign_keys = ON;
 
 -- Create tables with foreign key constraints inline
+-- Create tables with foreign key constraints inline
 CREATE TABLE categories (
                             category_id INTEGER PRIMARY KEY,
                             type_name TEXT NOT NULL
@@ -26,7 +27,7 @@ CREATE TABLE accounts (
                           email TEXT NOT NULL,
                           credit_card TEXT NOT NULL,
                           address_id INTEGER NOT NULL,
-                          FOREIGN KEY (address_id) REFERENCES addresses(address_id)
+                          FOREIGN KEY (address_id) REFERENCES addresses (address_id) ON DELETE CASCADE
 );
 
 CREATE TABLE products (
@@ -35,7 +36,7 @@ CREATE TABLE products (
                           description TEXT NOT NULL,
                           price REAL NOT NULL,
                           category_id INTEGER NOT NULL,
-                          FOREIGN KEY (category_id) REFERENCES categories(category_id)
+                          FOREIGN KEY (category_id) REFERENCES categories (category_id) ON DELETE CASCADE
 );
 
 CREATE TABLE warehouses (
@@ -43,7 +44,7 @@ CREATE TABLE warehouses (
                             name TEXT NOT NULL,
                             capacity INTEGER NOT NULL,
                             address_id INTEGER NOT NULL,
-                            FOREIGN KEY (address_id) REFERENCES addresses(address_id)
+                            FOREIGN KEY (address_id) REFERENCES addresses (address_id) ON DELETE CASCADE
 );
 
 CREATE TABLE orders (
@@ -51,7 +52,7 @@ CREATE TABLE orders (
                         total_price REAL NOT NULL,
                         finished BOOLEAN NOT NULL,
                         account_id INTEGER NOT NULL,
-                        FOREIGN KEY (account_id) REFERENCES accounts(account_id)
+                        FOREIGN KEY (account_id) REFERENCES accounts (account_id) ON DELETE CASCADE
 );
 
 CREATE TABLE ordered_products (
@@ -59,8 +60,8 @@ CREATE TABLE ordered_products (
                                   amount INTEGER NOT NULL,
                                   order_id INTEGER NOT NULL,
                                   product_id INTEGER NOT NULL,
-                                  FOREIGN KEY (order_id) REFERENCES orders(order_id),
-                                  FOREIGN KEY (product_id) REFERENCES products(product_id)
+                                  FOREIGN KEY (order_id) REFERENCES orders (order_id) ON DELETE CASCADE,
+                                  FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
 );
 
 CREATE TABLE product_comments (
@@ -68,8 +69,8 @@ CREATE TABLE product_comments (
                                   content TEXT NOT NULL,
                                   account_id INTEGER NOT NULL,
                                   product_id INTEGER NOT NULL,
-                                  FOREIGN KEY (account_id) REFERENCES accounts(account_id),
-                                  FOREIGN KEY (product_id) REFERENCES products(product_id)
+                                  FOREIGN KEY (account_id) REFERENCES accounts (account_id) ON DELETE CASCADE,
+                                  FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
 );
 
 CREATE TABLE stocks (
@@ -77,8 +78,8 @@ CREATE TABLE stocks (
                         amount INTEGER NOT NULL,
                         warehouse_id INTEGER NOT NULL,
                         product_id INTEGER NOT NULL,
-                        FOREIGN KEY (warehouse_id) REFERENCES warehouses(warehouse_id),
-                        FOREIGN KEY (product_id) REFERENCES products(product_id)
+                        FOREIGN KEY (warehouse_id) REFERENCES warehouses (warehouse_id) ON DELETE CASCADE,
+                        FOREIGN KEY (product_id) REFERENCES products (product_id) ON DELETE CASCADE
 );
 
 -- Insert sample data
@@ -148,7 +149,31 @@ INSERT INTO product_comments (comment_id, content, account_id, product_id) VALUE
                                                                                    1, 4),
                                                                                   (5,
                                                                                    'Beautiful necklace, looks even better in person',
-                                                                                   2, 5);
+                                                                                   2, 5),
+                                                                                  (6,
+                                                                                   'Perfect fit and beautiful fabric!',
+                                                                                   1, 1),
+                                                                                  (7,
+                                                                                   'Perfect fit and beautiful fabric!',
+                                                                                   1, 1),
+                                                                                  (8,
+                                                                                   'Perfect fit and beautiful fabric!',
+                                                                                   1, 1),
+                                                                                  (9,
+                                                                                   'Perfect fit and beautiful fabric!',
+                                                                                   1, 1),
+                                                                                  (10,
+                                                                                   'Perfect fit and beautiful fabric!',
+                                                                                   1, 1),
+                                                                                  (11,
+                                                                                   'Perfect fit and beautiful fabric!',
+                                                                                   1, 1),
+                                                                                  (12,
+                                                                                   'Perfect fit and beautiful fabric!',
+                                                                                   1, 1),
+                                                                                  (13,
+                                                                                   'Perfect fit and beautiful fabric!',
+                                                                                   1, 1);
 
 -- Updated stock information
 INSERT INTO stocks (stock_id, amount, warehouse_id, product_id) VALUES (1, 25, 1, 1), -- Dresses in East Coast

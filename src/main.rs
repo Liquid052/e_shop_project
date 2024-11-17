@@ -1,18 +1,19 @@
 use crate::prelude::*;
 
-mod resources;
 mod plugins;
 mod prelude;
+mod resources;
 
 // db
-mod schema;
 mod models;
+mod schema;
 
 fn main() {
     AppBuilder::new()
         .name("Eshop project")
         .add(DatabasePlugin::new())
         .add(DomainPlugin::new())
+        .add(BusinessPlugin::new())
         .add(WindowPlugin::new())
         .build()
         .run();

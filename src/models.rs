@@ -1,6 +1,6 @@
+use crate::schema::*;
 use bigdecimal::BigDecimal;
 use diesel::prelude::*;
-use crate::schema::*;
 
 #[derive(Queryable, Insertable)]
 #[diesel(table_name = crate::schema::addresses)]
@@ -13,7 +13,7 @@ pub struct Address {
     pub country: String,
 }
 
-#[derive(Queryable, Selectable, Insertable, Default, Debug)]
+#[derive(Queryable, Selectable, Insertable, Default, Clone, Debug)]
 #[diesel(table_name = crate::schema::accounts)]
 #[diesel(check_for_backend(diesel::sqlite::Sqlite))]
 pub struct Account {
@@ -28,13 +28,22 @@ pub struct Account {
     pub address_id: i32,
 }
 
-#[derive(Queryable, Selectable, Insertable)]
+#[derive(Queryable, Selectable, Insertable, Debug, Clone)]
 #[diesel(table_name = orders)]
 pub struct Order {
     pub order_id: i32,
     pub total_price: BigDecimal,
     pub finished: bool,
     pub account_id: i32,
+}
+
+#[derive(Queryable, Insertable, Debug, Default, Clone)]
+#[diesel(table_name = product_comments)]
+pub struct ProductComment {
+    pub comment_id: i32,
+    pub content: String,
+    pub account_id: i32,
+    pub product_id: i32,
 }
 
 #[derive(Queryable, Insertable)]
@@ -46,7 +55,7 @@ pub struct OrderedProduct {
     pub product_id: i32,
 }
 
-#[derive(Queryable, Insertable)]
+#[derive(Queryable, Insertable, Default, Clone, Debug)]
 #[diesel(table_name = products)]
 pub struct Product {
     pub product_id: i32,

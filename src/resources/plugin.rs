@@ -1,6 +1,6 @@
-use std::any::{Any, TypeId};
-use std::fmt::Debug;
 use crate::resources::App;
+use std::any::Any;
+use std::fmt::Debug;
 
 pub trait Plugin: Any + Debug + 'static {
     fn plugin_name(&self) -> &'static str;

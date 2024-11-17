@@ -6,7 +6,7 @@ pub enum Build {
 }
 
 impl Build {
-    pub fn run(mut self) {
+    pub fn run(self) {
         match self {
             Build::App(app) => app.run(),
             Build::Window(window_plugin) => window_plugin.run(),

@@ -1,14 +1,13 @@
-#![ allow(unused)]
-use std::any::{type_name, Any, TypeId};
-use std::collections::HashMap;
-use std::fmt::Debug;
-use std::sync::{Arc, RwLock};
+#![allow(unused)]
+use crate::prelude::*;
 use anymap::AnyMap;
 use dotenvy::dotenv;
 use log::{error, LevelFilter};
 use simple_logger::SimpleLogger;
-use crate::prelude::*;
-
+use std::any::{type_name, Any, TypeId};
+use std::collections::HashMap;
+use std::fmt::Debug;
+use std::sync::{Arc, RwLock};
 
 // aliases
 pub type DynPlugin = Arc<RwLock<dyn Plugin>>;
@@ -31,7 +30,10 @@ impl App {
     // build parameters
     pub fn new() -> Self {
         // init utils
-        SimpleLogger::new().with_level(LevelFilter::Info).init().unwrap();
+        SimpleLogger::new()
+            .with_level(LevelFilter::Info)
+            .init()
+            .unwrap();
         dotenv().ok();
 
         let mut res_map: SingletonMap = Default::default();
@@ -70,11 +72,11 @@ impl App {
         self.any_map.get::<Arc<RwLock<T>>>().cloned()
     }
     pub fn get_expected<T: Plugin>(&self) -> Arc<RwLock<T>> {
-        let Some(arc) = self.any_map
-            .get::<Arc<RwLock<T>>>()
-            .cloned() else {
-
-            error!("Attempted to get type that isn't registered in App {}", type_name::<T>());
+        let Some(arc) = self.any_map.get::<Arc<RwLock<T>>>().cloned() else {
+            error!(
+                "Attempted to get type that isn't registered in App {}",
+                type_name::<T>()
+            );
             panic!();
         };
 
@@ -96,46 +98,67 @@ impl App {
         &self.app_name
     }
 
-    pub fn update(&mut self) {
+    pub fn build(&mut self) {
         if !self.first_update {
-            self.update_vec.iter()
+            self.update_vec
+                .iter()
                 .for_each(|plugin| plugin.write().unwrap().on_build(self));
 
-            self.update_vec.iter()
+            self.update_vec
+                .iter()
+                .for_each(|plugin| plugin.write().unwrap().on_startup());
+
+            self.first_update = true;
+        }
+    }
+    pub fn update(&mut self) {
+        if !self.first_update {
+            self.update_vec
+                .iter()
+                .for_each(|plugin| plugin.write().unwrap().on_build(self));
+
+            self.update_vec
+                .iter()
                 .for_each(|plugin| plugin.write().unwrap().on_startup());
 
             self.first_update = true;
         }
 
-        self.update_vec.iter()
+        self.update_vec
+            .iter()
             .for_each(|plugin| plugin.write().unwrap().on_update());
 
-        self.update_vec.iter()
+        self.update_vec
+            .iter()
             .for_each(|plugin| plugin.write().unwrap().on_post_update());
     }
 }
 
 impl Run for App {
     fn run(mut self) {
-        self.update_vec.iter()
+        self.update_vec
+            .iter()
             .for_each(|plugin| plugin.write().unwrap().on_build(&self));
 
-        self.update_vec.iter()
+        self.update_vec
+            .iter()
             .for_each(|plugin| plugin.write().unwrap().on_startup());
 
         self.first_update = true;
 
         // update loop
-        while !self.get_resource::<AppExit>()
+        while !self
+            .get_resource::<AppExit>()
             .expect("Cant take AppExit")
             .should_exit()
         {
-            self.update_vec.iter()
+            self.update_vec
+                .iter()
                 .for_each(|plugin| plugin.write().unwrap().on_update());
 
-            self.update_vec.iter()
+            self.update_vec
+                .iter()
                 .for_each(|plugin| plugin.write().unwrap().on_post_update());
-
         }
     }
 }

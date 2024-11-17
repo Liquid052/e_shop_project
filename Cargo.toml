@@ -18,6 +18,8 @@ bigdecimal = "0.4"
 # presentation
 egui = "0.29.1"
 eframe = "0.29.1"
+egui_listview = "0.1.5"
+
 
 # utils
 anymap.version = "1.0.0-beta.2"
